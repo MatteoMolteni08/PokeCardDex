@@ -17,14 +17,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato: " + username));
+    public UserDetails loadUserByUsername(String loginInput) throws UsernameNotFoundException {
+        // Cerchiamo nel DB passando l'input sia al campo nome che al campo email
+        User user = userRepository.findByNomeOrEmail(loginInput, loginInput)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con Nome o Email: " + loginInput));
 
+        // Restituiamo l'utente a Spring Security.
+        // Usiamo l'email come identificativo principale di sessione.
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword()) // Deve essere criptata nel DB
-                .roles(user.getRole().replace("ROLE_", ""))
+                .username(user.getEmail())
+                .password(user.getPassword())
                 .build();
     }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+      th:fragment="parent(title, contentFragment)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title} + ' | PokéCardDex'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon/favicon.ico}">
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- Header comune -->
+<header th:replace="fragments/header :: header-custom"></header>
+
+<!-- Contenuto dinamico ereditato/sovrascritto dalle sottopagine -->
+<main>
+    <div th:replace="${contentFragment}">
+        <!-- Contenuto di fallback se non specificato -->
+        <p>Contenuto di default</p>
+    </div>
+</main>
+
+<!-- Footer comune -->
+<footer th:replace="fragments/footer :: footer-custom"></footer>
+</div>
+
+</body>
+</html>

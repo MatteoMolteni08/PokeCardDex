@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://thymeleaf.org"
+      th:replace="~{layout/base :: parent(
+          title='Home Page',
+          contentFragment=~{:: .page-content}
+      )}">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Ignorato perché sostituito dal layout</title>
 </head>
 <body>
-<p th:text="Hello"></p>
+<!-- Questo tag corrisponde al selettore .page-content richiesto dal layout -->
+<div class="page-content">
+    <p>
+        <img th:src="@{/images/mega_Darkrai-ex.png}" height="400px" style="position: absolute; left: 250px">
+        <img th:src="@{/images/logo.png}" height="400px">
+        <img th:src="@{/images/tyrantrum.png}" height="400px" style="position: absolute; right: 250px">
+    </p>
+    <h1>Benvenuto su POKÉCARDDEX!</h1>
+    <h2>Uno dei pochi siti dedicati alla collezione delle celebri carte pokémon</h2>
+</div>
 </body>
 </html>
