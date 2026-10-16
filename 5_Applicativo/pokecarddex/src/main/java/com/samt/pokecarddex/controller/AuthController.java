@@ -50,4 +50,13 @@ public class AuthController {
 
         return "redirect:/login?success";
     }
+
+    /*@PostMapping("/login")
+    public String loginUser(
+            @RequestParam String username,
+            @RequestParam String password){
+        if (userRepository.findByNomeOrEmail(username, username).isPresent()) {
+            if (passwordEncoder.matches(password, ))
+        }
+    }*/
 }

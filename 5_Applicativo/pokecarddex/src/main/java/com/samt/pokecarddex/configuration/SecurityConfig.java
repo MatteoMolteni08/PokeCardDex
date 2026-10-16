@@ -17,7 +17,7 @@ public class SecurityConfig {
                         // Permette l'accesso pubblico esplicito alle pagine HTML di login e signup
                         .requestMatchers("/login", "/signup").permitAll()
                         // Permette l'accesso a tutte le risorse statiche standard (CSS, JS)
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        //.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         // Qualsiasi altra richiesta richiederà l'autenticazione
                         .anyRequest().authenticated()
                 )

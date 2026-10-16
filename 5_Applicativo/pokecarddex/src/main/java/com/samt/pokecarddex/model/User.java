@@ -4,13 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "users") // Definisce il nome della tabella su phpMyAdmin
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +31,43 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Getter e Setter
-    /*public Long getId() { return id; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }*/
+    // --- METODI RICHIESTI DA USERDETAILS ---
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Ritorna una lista vuota o i ruoli dell'utente (es. ROLE_USER)
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        // Indica a Spring Security quale campo usare come login
+        return this.email;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // L'account non è scaduto
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // L'account non è bloccato
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Le credenziali non sono scadute
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // L'utente è attivo
+    }
 }
+

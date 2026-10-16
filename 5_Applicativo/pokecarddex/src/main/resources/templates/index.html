@@ -17,6 +17,10 @@
     </p>
     <h1>Benvenuto su POKÉCARDDEX!</h1>
     <h2>Uno dei pochi siti dedicati alla collezione delle celebri carte pokémon</h2>
+    <h3>Le tue ultime carte aggiunte</h3>
+    <div th:each="carta: ${carte}" class="card-container">
+        <img th:src="${carta.image + '/high.png'}" th:alt="${carta.name}"/>
+    </div>
 </div>
 </body>
 </html>
