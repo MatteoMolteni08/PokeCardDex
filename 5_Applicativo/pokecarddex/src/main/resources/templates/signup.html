@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign up</title>
+</head>
+<body>
+<h2>Accedi al sistema</h2>
+
+<!-- Messaggio di errore -->
+<div th:if="${param.error}" style="color: red;">
+  Username o password non validi.
+</div>
+
+<form th:action="@{/login}" method="post">
+  <div>
+    <label for="mail">E-mail:</label>
+    <!-- type="text" permette di inserire liberamente testo o indirizzi email -->
+    <input type="email" id="mail" name="mail" required placeholder="abc@example.com"/>
+  </div>
+  <div>
+    <label for="username">Nome utente:</label>
+    <!-- type="text" permette di inserire liberamente testo o indirizzi email -->
+    <input type="text" id="username" name="username" required placeholder="user"/>
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+  </div>
+  <div>
+    <button type="submit">Sign up</button>
+  </div>
+</form>
+<script src="@{/js/signupScript.js}"></script>
+</body>
+</html>

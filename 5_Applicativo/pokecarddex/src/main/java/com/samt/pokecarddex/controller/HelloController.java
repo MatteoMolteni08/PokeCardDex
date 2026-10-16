@@ -21,4 +21,9 @@ public class HelloController {
     public String login() {
         return "login"; // Corrisponde a login.html in templates/
     }
+
+    @GetMapping("signup")
+    public String signup() {
+        return "signup";
+    }
 }

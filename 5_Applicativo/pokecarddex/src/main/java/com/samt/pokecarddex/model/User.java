@@ -2,10 +2,14 @@ package com.samt.pokecarddex.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users") // Definisce il nome della tabella su phpMyAdmin
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class User {
 
     @Id
@@ -22,11 +26,11 @@ public class User {
     private String password;
 
     // Getter e Setter
-    public Long getId() { return id; }
+    /*public Long getId() { return id; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password) { this.password = password; }*/
 }
