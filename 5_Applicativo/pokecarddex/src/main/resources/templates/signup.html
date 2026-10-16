@@ -1,36 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Sign up</title>
+  <!-- Assicurati che lo stile sia lo stesso usato per il login per coerenza visiva -->
+  <link rel="stylesheet" th:href="@{/css/securityStyle.css}">
 </head>
 <body>
-<h2>Accedi al sistema</h2>
+<div class="login-page-container">
+  <div class="login-card">
+    <h2>Registrati al sistema</h2>
 
-<!-- Messaggio di errore -->
-<div th:if="${param.error}" style="color: red;">
-  Username o password non validi.
+    <!-- Messaggio di errore generico (es. se la mail o il nome sono già usati) -->
+    <div th:if="${error}" style="color: #dc3545; background-color: #f8d7da; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+      <span th:text="${error}">Errore durante la registrazione.</span>
+    </div>
+
+    <!-- 1. CORRETTO: l'action ora punta a /signup (o /registrati) e NON a /login -->
+    <form th:action="@{/signup}" method="post">
+
+      <!-- Campo E-mail -->
+      <div class="form-group">
+        <label for="mail">E-mail:</label>
+        <input type="email" id="mail" name="email" required placeholder="abc@example.com"/>
+      </div>
+
+      <!-- Campo Nome utente (corrisponde alla colonna 'nome' del DB) -->
+      <div class="form-group">
+        <label for="username">Nome utente:</label>
+        <input type="text" id="username" name="nome" required placeholder="user"/>
+      </div>
+
+      <!-- Campo Password -->
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Inserisci una password sicura"/>
+      </div>
+
+      <div>
+        <button type="submit" class="btn-login">Sign up</button>
+      </div>
+    </form>
+
+    <!-- 2. CORRETTO: Link di navigazione gestito con le rotte Thymeleaf -->
+    <div class="signup-link">
+      Hai già un account? <a th:href="@{/login}">Accedi qui</a>
+    </div>
+  </div>
 </div>
 
-<form th:action="@{/login}" method="post">
-  <div>
-    <label for="mail">E-mail:</label>
-    <!-- type="text" permette di inserire liberamente testo o indirizzi email -->
-    <input type="email" id="mail" name="mail" required placeholder="abc@example.com"/>
-  </div>
-  <div>
-    <label for="username">Nome utente:</label>
-    <!-- type="text" permette di inserire liberamente testo o indirizzi email -->
-    <input type="text" id="username" name="username" required placeholder="user"/>
-  </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-  </div>
-  <div>
-    <button type="submit">Sign up</button>
-  </div>
-</form>
-<script src="@{/js/signupScript.js}"></script>
+<!-- 3. FISSATO: Il tag script richiede th:src per interpretare correttamente le rotte di Spring -->
+<script th:src="@{/js/signupScript.js}"></script>
 </body>
 </html>

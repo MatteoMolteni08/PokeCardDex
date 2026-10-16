@@ -1,32 +1,53 @@
 package com.samt.pokecarddex.controller;
 
-import com.samt.pokecarddex.dto.RegistrationRequest;
+// 1. IMPORTANTE: Forza l'import del TUO modello User e rimuovi quello di Spring Security se presente
 import com.samt.pokecarddex.model.User;
-import com.samt.pokecarddex.service.UserService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.samt.pokecarddex.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RestController
-
-@CrossOrigin(origins = "*") // Permette le chiamate da qualsiasi frontend in fase di sviluppo
+@Controller
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    // 2. DICHIARA LE VARIABILI GLOBALI MANCANTI
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    // 3. INIETTA LE VARIABILI TRAMITE IL COSTRUTTORE
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/signup")
+    public String signupPage() {
+        return "signup";
+    }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody RegistrationRequest request) {
-        try {
-            // Invoca il servizio di registrazione
-            User registeredUser = userService.registerNewUser(request);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Utente registrato con successo! ID: " + registeredUser.getId());
-        } catch (RuntimeException e) {
-            // Cattura gli errori generati dal Service (es. email/username duplicati)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    public String registerUser(@RequestParam String nome,
+                               @RequestParam String email,
+                               @RequestParam String password,
+                               Model model) {
+
+        // Ora userRepository funzionerà senza errori
+        if (userRepository.findByNomeOrEmail(nome, email).isPresent()) {
+            model.addAttribute("error", "Nome utente o Email già utilizzati!");
+            return "signup";
         }
+
+        // Ora Java capirà che si tratta del tuo modello User con i relativi setter
+        User newUser = new User();
+        newUser.setNome(nome);
+        newUser.setEmail(email);
+        newUser.setPassword(passwordEncoder.encode(password)); // Cifratura funzionante
+
+        userRepository.save(newUser);
+
+        return "redirect:/login?success";
     }
 }

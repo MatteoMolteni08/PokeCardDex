@@ -3,33 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/securityStyle.css}">
 </head>
 <body>
-<h2>Accedi al sistema</h2>
 
-<!-- Messaggio di errore -->
-<div th:if="${param.error}" style="color: red;">
-    Username o password non validi.
+<div class="login-page-container">
+    <div class="login-card">
+        <h2>Accedi al sistema</h2>
+
+        <!-- Messaggi di avviso opzionali -->
+        <div th:if="${param.error}" style="color: #dc3545; background-color: #f8d7da; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
+            Nome utente, Email o Password non validi.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <!-- Campo Nome utente o Email -->
+            <div class="form-group">
+                <label for="username">Nome utente o Email</label>
+                <input type="text" id="username" name="username" placeholder="Inserisci il tuo nome o la tua email" required />
+            </div>
+
+            <!-- Campo Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Inserisci la password" required />
+            </div>
+
+            <!-- Bottone di Login -->
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <!-- Link per la Registrazione / Signup -->
+        <div class="signup-link">
+            Non hai ancora un account? <a th:href="@{/signup}">Registrati qui</a>
+        </div>
+    </div>
 </div>
 
-<!-- Messaggio di logout -->
-<div th:if="${param.logout}" style="color: green;">
-    Sei stato disconnesso con successo.
-</div>
-
-<form th:action="@{/login}" method="post">
-    <div>
-        <label for="username">Nome utente o Email:</label>
-        <!-- type="text" permette di inserire liberamente testo o indirizzi email -->
-        <input type="text" id="username" name="username" required />
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
 </body>
 </html>

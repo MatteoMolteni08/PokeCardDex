@@ -14,7 +14,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**").permitAll()
+                        // Permette l'accesso pubblico esplicito alle pagine HTML di login e signup
+                        .requestMatchers("/login", "/signup").permitAll()
+                        // Permette l'accesso a tutte le risorse statiche standard (CSS, JS)
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        // Qualsiasi altra richiesta richiederà l'autenticazione
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
