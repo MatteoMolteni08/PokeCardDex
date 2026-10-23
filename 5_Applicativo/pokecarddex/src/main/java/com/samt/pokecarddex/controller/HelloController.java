@@ -45,6 +45,7 @@ public class HelloController {
 
         model.addAttribute("carte", pokemonCards);
         model.addAttribute("title", "Home Page");
+        model.addAttribute("username", user.getUsername());
         return "index";
     }
 

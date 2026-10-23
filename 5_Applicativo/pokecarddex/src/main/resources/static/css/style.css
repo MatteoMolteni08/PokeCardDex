@@ -35,21 +35,30 @@ main {
     flex:1;
 }
 
-header{
-    background-color: #00b9d1;
-    height: 60px;
-    width: 100%;
+.site-header {
     display: flex;
-    flex-direction: row;
+    align-items: center; /* Centra verticalmente logo e menu */
+    background-color: #00bcd4; /* Il tuo colore azzurro */
+    padding: 10px 20px;
 }
-header ul{
+
+.nav-right {
     display: flex;
-    flex-direction: row;
-    position: absolute;
-    right: 20px;
+    align-items: center; /* Centra verticalmente i link e l'icona */
+    gap: 20px;           /* Spazio uniforme tra i link e l'icona */
+    margin-left: auto;   /* Spinge tutto il gruppo a destra della navbar */
 }
-ul li {
-    margin: 10px;
+
+/* Stile opzionale per l'immagine del profilo */
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* La rende circolare come nell'immagine */
+}
+
+.icon {
+    margin: 0px;
+    padding: 0;
 }
 
 /* 1. Il contenitore padre: trasforma tutto in una riga orizzontale */
@@ -66,7 +75,7 @@ ul li {
 /* 2. Il contenitore di ogni singola carta */
 .card-container {
     flex: 0 1 auto;                 /* Permette alle carte di ridimensionarsi in base all'immagine */
-    max-width: 500px;               /* Imposta la larghezza massima per ogni carta (regolabile) */
+    max-width: 350px;               /* Imposta la larghezza massima per ogni carta (regolabile) */
     transition: transform 0.2s;     /* Prepara l'animazione per l'effetto hover */
 }
 

@@ -31,12 +31,17 @@ INSERT INTO card (user_id, card_id, quantity) VALUES
 (3, "sv06-130", 3),
 (3, "me02-013", 1),
 (2, "sv08.5-041", 3),
-(3, "me03-045", 1);
+(3, "me03-045", 1),
+(3, "sv08.5-041", 1),
+(3, "sv03-125", 1),
+(2, "xy0-26", 1),
+(2, "sv09-098", 1),
+(2, "sm6-69", 2),
+(2, "svp-189", 3),
+(2, "svp-184", 2),
+(4, "sv08.5-042", 1),
+(4, "sv03-115", 1);
 
 SELECT nome, card_id
 FROM users, card
 WHERE users.id = card.user_id;
-
-INSERT INTO card (user_id, card_id, quantity) VALUES 
-(3, "sv08.5-041", 1),
-(3, "sv03-125", 1);
