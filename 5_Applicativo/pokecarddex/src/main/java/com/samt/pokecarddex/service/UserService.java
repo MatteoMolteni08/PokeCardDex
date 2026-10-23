@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -47,17 +47,10 @@ public class UserService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String loginInput) throws UsernameNotFoundException {
-        // Cerchiamo nel DB passando l'input sia al campo nome che al campo email
-        User user = userRepository.findByNomeOrEmail(loginInput, loginInput)
-                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con Nome o Email: " + loginInput));
-
-        // Restituiamo l'utente a Spring Security.
-        // Usiamo l'email come identificativo principale di sessione.
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .authorities("ROLE_USER") // Autorizzazione fissa per superare il controllo di Spring
-                .build();
+        // Deve ritornare DIRETTAMENTE il tuo utente del database
+        return userRepository.findByNomeOrEmail(loginInput, loginInput)
+                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
     }
+
 }
 

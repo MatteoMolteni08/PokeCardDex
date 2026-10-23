@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PokemonCardService {
@@ -43,7 +45,7 @@ public class PokemonCardService {
      * NUOVA FUNZIONE DI BUSINESS: Recupera i dati dal DB e restituisce le carte mappate.
      * Isola completamente il controller dalle logiche di persistenza e cicli di rete.
      */
-    public List<net.tcgdex.sdk.models.Card> getLastFiveCardsForUser(Long userId) {
+    /*public List<net.tcgdex.sdk.models.Card> getLastFiveCardsForUser(Long userId) {
         // 1. Recupera i record grezzi da MySQL
         List<UserCard> userCards = userCardRepository.findTop5ByUserIdOrderByIdDesc(userId);
 
@@ -58,5 +60,21 @@ public class PokemonCardService {
         }
 
         return fullCardsList;
+    }*/
+    public List<Map<String, String>> getLastFiveCardsForUser(Long userId) {
+        List<UserCard> userCards = userCardRepository.findTop5ByUserId(userId);
+        List<Map<String, String>> safeCards = new ArrayList<>();
+
+        for (UserCard uc : userCards) {
+            net.tcgdex.sdk.models.Card card = this.getCardById(uc.getCardId());
+            if (card != null && card.getImage() != null) {
+                Map<String, String> c = new HashMap<>();
+                c.put("name", card.getName());
+                // Generiamo l'URL dell'immagine definitivo già pronto per l'HTML
+                c.put("imageUrl", card.getImage() + "/high.png");
+                safeCards.add(c);
+            }
+        }
+        return safeCards;
     }
 }

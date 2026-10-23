@@ -3,6 +3,7 @@ package com.samt.pokecarddex.controller;
 // 1. IMPORTANTE: Forza l'import del TUO modello User e rimuovi quello di Spring Security se presente
 import com.samt.pokecarddex.model.User;
 import com.samt.pokecarddex.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +16,11 @@ public class AuthController {
 
     // 2. DICHIARA LE VARIABILI GLOBALI MANCANTI
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();;
 
     // 3. INIETTA LE VARIABILI TRAMITE IL COSTRUTTORE
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/signup")

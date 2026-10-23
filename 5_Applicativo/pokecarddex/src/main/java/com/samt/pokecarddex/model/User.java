@@ -36,7 +36,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Ritorna una lista vuota o i ruoli dell'utente (es. ROLE_USER)
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

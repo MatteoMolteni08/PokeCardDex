@@ -1,23 +1,21 @@
 package com.samt.pokecarddex.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "card")
+@IdClass(UserCardId.class) // Colleghiamo la chiave composta
+@Data
 public class UserCard {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Id
     @Column(name = "card_id", nullable = false)
     private String cardId; // Memorizza la stringa dell'ID TCGdex (es: "swsh3-136")
 
-    // Getter e Setter
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public String getCardId() { return cardId; }
-    public void setCardId(String cardId) { this.cardId = cardId; }
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 }

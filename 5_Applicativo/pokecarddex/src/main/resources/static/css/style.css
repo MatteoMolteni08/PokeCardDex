@@ -1,5 +1,5 @@
 body {
-    background-color: #afeeee;
+    background-color: #bcf1f1;
     font-family: helvetic, Arial;
     align-content: center;
     margin: 0;
@@ -36,7 +36,7 @@ main {
 }
 
 header{
-    background-color: #00CED1;
+    background-color: #00b9d1;
     height: 60px;
     width: 100%;
     display: flex;
@@ -51,6 +51,39 @@ header ul{
 ul li {
     margin: 10px;
 }
+
+/* 1. Il contenitore padre: trasforma tutto in una riga orizzontale */
+.cards-wrapper {
+    display: flex;                  /* Attiva il layout Flexbox */
+    flex-direction: row;            /* Dispone gli elementi in orizzontale */
+    justify-content: center;        /* Centra la riga di carte nella pagina */
+    gap: 20px;                      /* Crea uno spazio uniforme di 20px tra una carta e l'altra */
+    padding: 20px;                  /* Aggiunge spazio interno intorno alla griglia */
+    width: 100%;                    /* Sfrutta tutta la larghezza disponibile */
+    box-sizing: border-box;
+}
+
+/* 2. Il contenitore di ogni singola carta */
+.card-container {
+    flex: 0 1 auto;                 /* Permette alle carte di ridimensionarsi in base all'immagine */
+    max-width: 500px;               /* Imposta la larghezza massima per ogni carta (regolabile) */
+    transition: transform 0.2s;     /* Prepara l'animazione per l'effetto hover */
+}
+
+/* 3. Gestione responsive e dimensioni delle immagini delle carte */
+.card-container img {
+    width: 100%;                    /* L'immagine occupa tutto lo spazio del suo contenitore */
+    height: auto;                   /* Mantiene le proporzioni verticali corrette della carta */
+    border-radius: 16px;            /* Arrotonda leggermente gli angoli della carta Pokémon */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Aggiunge un'ombra per far risaltare la carta dallo sfondo */
+}
+
+/* 4. Effetto visivo quando passi il mouse sopra la carta (Opzionale ma consigliato!) */
+.card-container:hover {
+    transform: translateY(-10px);   /* Solleva leggermente la carta */
+    transform: scale(1.15);
+}
+
 
 .site-footer {
     background-color: #111827;

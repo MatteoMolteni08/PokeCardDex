@@ -36,3 +36,7 @@ INSERT INTO card (user_id, card_id, quantity) VALUES
 SELECT nome, card_id
 FROM users, card
 WHERE users.id = card.user_id;
+
+INSERT INTO card (user_id, card_id, quantity) VALUES 
+(3, "sv08.5-041", 1),
+(3, "sv03-125", 1);

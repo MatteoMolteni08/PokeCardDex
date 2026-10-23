@@ -6,6 +6,7 @@ import com.samt.pokecarddex.repository.UserCardRepository;
 import com.samt.pokecarddex.service.PokemonCardService;
 import net.tcgdex.sdk.models.Card;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HelloController {
@@ -30,14 +32,16 @@ public class HelloController {
     }
 
     @GetMapping("/")
-    public String index(Model model, @AuthenticationPrincipal User user) {
-        // 1. Controlla di sicurezza se l'utente non è loggato (ridireziona al login)
-        if (user == null) {
+    public String index(Model model, Authentication authentication) {
+        // 1. Controllo di sicurezza: se l'autenticazione manca o non è valida, vai al login
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
             return "redirect:/login";
         }
+        // 2. Estraiamo il principal ed eseguiamo il cast sicuro alla tua classe User
+        User user = (User) authentication.getPrincipal();
         Long userId = user.getId();
 
-        List<Card> pokemonCards = pokemonCardService.getLastFiveCardsForUser(userId);
+        List<Map<String, String>> pokemonCards = pokemonCardService.getLastFiveCardsForUser(userId);
 
         model.addAttribute("carte", pokemonCards);
         model.addAttribute("title", "Home Page");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout/base :: parent(
           title='Home Page',
           contentFragment=~{:: .page-content}
@@ -17,10 +17,18 @@
     </p>
     <h1>Benvenuto su POKÉCARDDEX!</h1>
     <h2>Uno dei pochi siti dedicati alla collezione delle celebri carte pokémon</h2>
+
     <h3>Le tue ultime carte aggiunte</h3>
-    <div th:each="carta: ${carte}" class="card-container">
-        <img th:src="${carta.image + '/high.png'}" th:alt="${carta.name}"/>
+
+    <!-- Il contenitore padre -->
+    <div class="cards-wrapper">
+        <!-- Il ciclo Thymeleaf che genera le 5 carte -->
+        <div th:each="carta : ${carte}" class="card-container">
+            <img th:src="${carta.imageUrl}" th:alt="${carta.name}"/>
+        </div>
     </div>
+
+
 </div>
 </body>
 </html>
