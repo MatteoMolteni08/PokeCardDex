@@ -71,6 +71,16 @@ main {
     width: 100%;                    /* Sfrutta tutta la larghezza disponibile */
     box-sizing: border-box;
 }
+.cards-wrapper2 {
+    display: grid;                  /* Attiva il layout Grid */
+    grid-template-columns: auto auto auto auto auto;
+
+    justify-content: center;        /* Centra la riga di carte nella pagina */
+    gap: 20px;                      /* Crea uno spazio uniforme di 20px tra una carta e l'altra */
+    padding: 20px;                  /* Aggiunge spazio interno intorno alla griglia */
+    width: 100%;                    /* Sfrutta tutta la larghezza disponibile */
+    box-sizing: border-box;
+}
 
 /* 2. Il contenitore di ogni singola carta */
 .card-container {

@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface UserCardRepository extends JpaRepository<UserCard, UserCardId> {
     // Recupera le ultime 5 carte inserite dall'utente, ordinate dall'ultima alla prima
     List<UserCard> findTop5ByUserId(Long userId);
+
+    //Recupera tutte le carte legate all'utente
+    List<UserCard> findCardByUserId(Long userId);
 }

@@ -49,6 +49,24 @@ public class HelloController {
         return "index";
     }
 
+    @GetMapping("/cardlist")
+    public String cardlist(Model model, Authentication authentication) {
+        // 1. Controllo di sicurezza: se l'autenticazione manca o non è valida, vai al login
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() instanceof String) {
+            return "redirect:/login";
+        }
+        // 2. Estraiamo il principal ed eseguiamo il cast sicuro alla tua classe User
+        User user = (User) authentication.getPrincipal();
+        Long userId = user.getId();
+
+        List<Map<String, String>> pokemonCards = pokemonCardService.getCardsForUser(userId);
+
+        model.addAttribute("carte", pokemonCards);
+        model.addAttribute("title", "Home Page");
+        model.addAttribute("username", user.getUsername());
+        return "yourCards";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login"; // Corrisponde a login.html in templates/

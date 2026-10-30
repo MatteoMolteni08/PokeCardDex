@@ -15,8 +15,8 @@
 
     <!-- Menu e Icona allineati a destra -->
     <nav class="nav-right">
-        <a href="#">Home</a>
-        <a href="#">Servizi</a>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/cardlist}">Le mie carte</a>
         <a href="#">Chi siamo</a>
         <img th:src="${'https://api.dicebear.com/10.x/blobs/svg?seed=' + username}"
              alt="Profilo" class="profile-icon">

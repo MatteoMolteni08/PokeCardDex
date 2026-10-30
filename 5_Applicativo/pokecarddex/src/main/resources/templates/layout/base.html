@@ -11,7 +11,7 @@
 <div class="page-wrapper">
 
 <!-- Header comune -->
-<header th:replace="fragments/header :: header-custom"></header>
+<header th:replace="~{fragments/header :: header-custom}"></header>
 
 <!-- Contenuto dinamico ereditato/sovrascritto dalle sottopagine -->
 <main>
@@ -22,7 +22,7 @@
 </main>
 
 <!-- Footer comune -->
-<footer th:replace="fragments/footer :: footer-custom"></footer>
+<footer th:replace="~{fragments/footer :: footer-custom}"></footer>
 </div>
 
 </body>

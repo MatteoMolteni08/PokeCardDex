@@ -77,4 +77,21 @@ public class PokemonCardService {
         }
         return safeCards;
     }
+
+    public List<Map<String, String>> getCardsForUser(Long userId) {
+        List<UserCard> userCards = userCardRepository.findCardByUserId(userId);
+        List<Map<String, String>> safeCards = new ArrayList<>();
+
+        for (UserCard uc : userCards) {
+            net.tcgdex.sdk.models.Card card = this.getCardById(uc.getCardId());
+            if (card != null && card.getImage() != null) {
+                Map<String, String> c = new HashMap<>();
+                c.put("name", card.getName());
+                // Generiamo l'URL dell'immagine definitivo già pronto per l'HTML
+                c.put("imageUrl", card.getImage() + "/high.png");
+                safeCards.add(c);
+            }
+        }
+        return safeCards;
+    }
 }

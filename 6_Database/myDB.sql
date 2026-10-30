@@ -45,3 +45,18 @@ INSERT INTO card (user_id, card_id, quantity) VALUES
 SELECT nome, card_id
 FROM users, card
 WHERE users.id = card.user_id;
+
+INSERT INTO card (user_id, card_id, quantity) VALUES
+(3, "me05-031", 1),
+(3, "me05-048", 1),
+(3, "me03-044", 3);
+
+INSERT INTO card (user_id, card_id, quantity) VALUES
+(3, "me02.5-251", 1),
+(3, "sv02-271", 1),
+(3, "me02.5-154", 2);
+
+INSERT INTO card (user_id, card_id, quantity) VALUES
+(3, "sv08.5-071", 4),
+(3, "sv08.5-072", 4),
+(3, "sv08.5-173", 2);
