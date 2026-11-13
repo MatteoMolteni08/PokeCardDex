@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: parent(
+          title='Add cards',
+          contentFragment=~{:: .page-content}
+      )}">
+<head>
+  <title>Ignorato perché sostituito dal layout</title>
+</head>
+<body>
+<!-- Questo tag corrisponde al selettore .page-content richiesto dal layout -->
+<div class="page-content">
+  <h1>Aggiungi carte</h1>
+  <!-- Il contenitore padre -->
+  <div class="filtri">
+  <form>
+    <input type="text" id="filtro-nome" placeholder="Cerca Pokémon..." onchange="filtraCarte()">
+    <select id="filtro-categoria" onchange="gestisciCambioTipoCarta()">
+      <option value="">Tutti i tipi</option>
+      <option value="Pokemon">Pokémon</option>
+      <option value="Trainer">Allenatore</option>
+      <option value="Energy">Energia</option>
+    </select>
+    <select id="filtro-tipo" onchange="filtraCarte()">
+      <option value="">Tutti i tipi</option>
+      <option value="Fire">Fuoco</option>
+      <option value="Water">Acqua</option>
+      <option value="Grass">Erba</option>
+      <option value="Lightning">Lampo</option>
+      <option value="Psychic">Psico</option>
+      <option value="Fighting">Lotta</option>
+      <option value="Darkness">Buio</option>
+      <option value="Metal">Acciaio</option>
+      <option value="Colorless">Normale</option>
+      <option value="Dragon">Drago</option>
+    </select>
+    <select id="filtro-tipoAllenatore" onchange="filtraCarte()">
+      <option value="Supporter">Allenatore (aiuto)</option>
+      <option value="Item">Allenatore (strumento)</option>
+      <option value="Pokémon tool">Allenatore (oggetto pokémon)</option>
+      <option value="Stadium">Allenatore (stadio)</option>
+    </select>
+    <select id="filtro-espansione" onchange="filtraCarte()">
+      <option value="">Tutti i set</option>
+      <option th:each="set : ${sets}" th:value="${set.getName()}" th:text="${set.getName()}"></option>
+    </select>
+  </form>
+</div>
+  <div class="cards-wrapper2">
+    <!-- Barra Filtri -->
+
+    <th:block th:fragment="bloccoRisultati">
+    <div th:each="carta : ${cards}" class="card-container">
+      <img th:if="${carta.image != null || carta.image != ''}" th:src="${carta.image}+'/high.png'" th:alt="${carta.name}"/>
+    </div>
+    <div id="box-carica-altre">
+      <button th:onclick="'caricaAltre(' + (${addCard.number} + 1) + ')'">Carica altre...</button>
+    </div>
+    </th:block>
+  </div>
+
+  <script th:src="@{/js/searchFilter.js}" defer></script>
+</div>
+
+</body>
+</html>

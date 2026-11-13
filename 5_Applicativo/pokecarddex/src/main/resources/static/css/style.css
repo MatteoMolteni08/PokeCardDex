@@ -73,7 +73,7 @@ main {
 }
 .cards-wrapper2 {
     display: grid;                  /* Attiva il layout Grid */
-    grid-template-columns: auto auto auto auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 350px));
 
     justify-content: center;        /* Centra la riga di carte nella pagina */
     gap: 20px;                      /* Crea uno spazio uniforme di 20px tra una carta e l'altra */
@@ -99,11 +99,32 @@ main {
 
 /* 4. Effetto visivo quando passi il mouse sopra la carta (Opzionale ma consigliato!) */
 .card-container:hover {
-    transform: translateY(-10px);   /* Solleva leggermente la carta */
-    transform: scale(1.15);
+    transform: translateY(-5px);   /* Solleva leggermente la carta */
+    transform: scale(1.10);
 }
 
-
+.filtri {
+    background-color: #00bcd4;
+    width: 98%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 16px;
+    border: 2px solid #0056b3;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    align-items: center;
+}
+.filtri input {
+    padding: 8px 36px 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    outline: none;
+}
+.filtri select {
+    border-radius: 16px;
+}
 .site-footer {
     background-color: #111827;
     color: #d1d5db;
