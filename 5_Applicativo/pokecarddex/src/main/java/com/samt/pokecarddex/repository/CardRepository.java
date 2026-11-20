@@ -5,77 +5,86 @@ import lombok.Getter;
 import net.tcgdex.sdk.TCGdex;
 import net.tcgdex.sdk.models.Card;
 import net.tcgdex.sdk.models.CardResume;
+import net.tcgdex.sdk.models.SerieResume;
 import net.tcgdex.sdk.models.SetResume;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Data
 @Getter
 public class CardRepository {
     private TCGdex tcgdex = new TCGdex("it");
 
+    private ArrayList<CardResume> cards;
+    private ArrayList<SerieResume> series;
     private ArrayList<SetResume> sets;
-    private ArrayList<Card> cards;
-
-    private SetResume[] set;
     private CardResume[] provCard;
 
     public CardRepository() {
-        sets = new ArrayList<>();
-        cards = new ArrayList<Card>();
-        set = tcgdex.fetchSets();
-        provCard = tcgdex.fetchCards();
+        cards = new ArrayList<>();
+        sets = new ArrayList<>(Arrays.stream(tcgdex.fetchSets()).toList());
+        series = new ArrayList<>(Arrays.stream(tcgdex.fetchSeries()).toList());
     }
 
-    public Page<Card> cercaConFiltri(String nome, String espansione,
-                                     String tipoCarta, String tipoEnergia,
-                                     String tipoAllenatore, Pageable pageable)
-    {
-
-        if (espansione != ""){
-            for (SetResume set : sets){
-                if (set.getName() == nome){
-                    provCard = tcgdex.fetchSet(set.getId()).getCards().toArray(CardResume[]::new);
+    public Page<CardResume> cercaConFiltri(String nome, String espansione,
+                                           String tipoCarta, String tipoEnergia,
+                                           String tipoAllenatore, Pageable pageable) {
+        if (nome.isBlank() && espansione.isBlank() && tipoCarta.isBlank() && tipoEnergia.isBlank()
+                && tipoAllenatore.isBlank()) {return Page.empty(pageable);}
+        if (espansione.isBlank()) {
+            for (SetResume set : sets) {
+                if (set.getName() == nome) {
+                    provCard = (CardResume[]) set.getFullSet().getCards().toArray();
                     break;
                 }
             }
-        }else {
+        } else {
             provCard = tcgdex.fetchCards();
+            if (provCard == null) {provCard = tcgdex.fetchCards();}
         }
-        for (CardResume card : provCard){
-            if (card.getName().contains(nome)){
-                cards.add(tcgdex.fetchCard(card.getId()));
+
+
+        for (CardResume card : provCard) {
+            if (!card.getName().toLowerCase().contains(nome.toLowerCase())) {
+                continue;
             }
-        }
-        if (tipoCarta != ""){
-            for (Card card : cards) {
-                if (card.getCategory() != tipoCarta){
-                    cards.remove((card));
-                }else {
-                    switch (card.getCategory()){
+
+            if (card.getFullCard().getCategory().equals(tipoCarta) && !tipoCarta.isBlank()) {
+                {
+                    switch (card.getFullCard().getCategory()) {
                         case "Pokemon":
-                            if (card.getTypes().get(0) != tipoEnergia && card.getTypes().get(1) != tipoEnergia){
-                                cards.remove((card));
+                            if (card.getFullCard().getTypes().get(0) != tipoEnergia
+                                    && card.getFullCard().getTypes().get(1) != tipoEnergia
+                                    && !tipoEnergia.isBlank()) {
+                                continue;
                             }
                             break;
                         case "Energy":
-                            if (card.getEnergyType() != tipoEnergia){
-                                cards.remove((card));
+                            if (card.getFullCard().getEnergyType() != tipoEnergia &&
+                                    !tipoEnergia.isBlank()) {
+                                continue;
                             }
                             break;
                         case "Trainer":
-                            if (card.getTrainerType() != tipoAllenatore){
-                                cards.remove((card));
+                            if (tipoAllenatore != "") {
+                                if (card.getFullCard().getTrainerType() != tipoAllenatore) {
+                                    continue;
+                                }
                             }
                             break;
                     }
                 }
             }
-        }
+            if (card.getFullCard().getSet().getFullSet().getSerie().getId().equals("tcgp")) {
+                continue;
+            }
 
-        return new PageImpl<Card>(cards, pageable, cards.size());
+            cards.add(card);
+        }
+        return new PageImpl<CardResume>(cards, pageable, cards.size());
     }
 }

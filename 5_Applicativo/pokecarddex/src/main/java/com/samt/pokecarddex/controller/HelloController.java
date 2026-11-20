@@ -30,6 +30,7 @@ import java.util.Map;
 import net.tcgdex.sdk.TCGdex;
 import net.tcgdex.sdk.models.SetResume;
 import net.tcgdex.sdk.models.CardResume;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -39,11 +40,30 @@ public class HelloController {
     private final PokemonCardService pokemonCardService;
     private final TCGdex tcgdex;
     private CardRepository cardRepository;
+    private ArrayList<SetResume> setList;
 
     public HelloController(PokemonCardService pokemonCardService) {
         this.pokemonCardService = pokemonCardService;
         this.tcgdex = new TCGdex("it");
         this.cardRepository = new CardRepository();
+
+        // Li scarica solo la prima volta che un utente apre la pagina
+        if (this.setList == null) {
+            this.setList = new ArrayList<>();
+            try {
+                SetResume[] fetchedSets = tcgdex.fetchSets();
+                if (fetchedSets != null) {
+                    for (SetResume s : fetchedSets) {
+                        if (s != null && s.getId() != null && !s.getFullSet().getSerie().getId().equalsIgnoreCase("tcgp")) {
+                            this.setList.add(s);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // Evita il crash se TCGdex non risponde al primo tentativo
+                this.setList = null;
+            }
+        }
     }
 
     @GetMapping("/")
@@ -95,18 +115,43 @@ public class HelloController {
             return "redirect:/login";
         }
 
+        Page<CardResume> risultati;
         Pageable pageable = PageRequest.of(page, 24);
 
-        Page<Card> risultati = cardRepository.cercaConFiltri(
-                nome, espansione, tipoCarta, tipoEnergia, tipoAllenatore, pageable
-        );
-
+        risultati = cardRepository.cercaConFiltri(
+                    nome, espansione, tipoCarta, tipoEnergia, tipoAllenatore, pageable);
 
 
         model.addAttribute("paginaCarte", risultati);
+        model.addAttribute("pagina", page);
+        model.addAttribute("title", "Add Card");
+        model.addAttribute("carte", risultati.getContent());
+        model.addAttribute("sets", setList);
 
+        return "addCard";
+    }
+
+    // 2. Endpoint per il caricamento parziale (chiamato dal Form e da "Carica altre")
+    @GetMapping("/addCard/cerca")
+    public String cercaParziale(
+            @RequestParam(defaultValue = "") String nome,
+            @RequestParam(defaultValue = "") String espansione,
+            @RequestParam(defaultValue = "") String tipoCarta,
+            @RequestParam(defaultValue = "") String tipoEnergia,
+            @RequestParam(defaultValue = "") String tipoAllenatore,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 24);
+        Page<CardResume> risultati = cardRepository.cercaConFiltri(nome, espansione, tipoCarta, tipoEnergia,
+                tipoAllenatore, pageable);
+
+        model.addAttribute("paginaCarte", risultati);
+
+        // Restituisce SOLO il frammento Thymeleaf invece di tutta la pagina
         return "addCard :: bloccoRisultati";
     }
+
 
     @GetMapping("/login")
     public String login() {

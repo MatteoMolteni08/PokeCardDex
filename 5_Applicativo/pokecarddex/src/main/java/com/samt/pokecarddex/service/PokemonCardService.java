@@ -1,6 +1,5 @@
 package com.samt.pokecarddex.service;
 
-import com.samt.pokecarddex.model.Card;
 import com.samt.pokecarddex.model.UserCard;
 import com.samt.pokecarddex.repository.UserCardRepository;
 import net.tcgdex.sdk.TCGdex;

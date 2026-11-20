@@ -1,56 +1,60 @@
-let timeoutRicerca;
+// 1. Gestisce solo mostra/nascondi dei menu a tendina
+function aggiornaVisibilitaFiltri() {
+    const tipoCarta = document.getElementById('filtro-supertype').value;
+    const selectEnergia = document.getElementById('filtro-energia');
+    const selectAllenatore = document.getElementById('filtro-allenatore');
 
-function gestisciCambioTipoCarta() {
-    const tipoCarta = document.getElementById('filtro-categoria').value;
-    const selectEnergia = document.getElementById('filtro-tipo');
-    const selectAllenatore = document.getElementById('filtro-tipoAllenatore');
-
-    // Mostra Energia solo per POKEMON o ENERGIA
     if (tipoCarta === 'Pokemon' || tipoCarta === 'Energy') {
         selectEnergia.style.display = 'inline-block';
     } else {
         selectEnergia.style.display = 'none';
-        selectEnergia.value = ''; // Reset filtro nascosto
+        selectEnergia.value = '';
     }
 
-    // Mostra Tipo Allenatore solo per ALLENATORE
     if (tipoCarta === 'Trainer') {
         selectAllenatore.style.display = 'inline-block';
     } else {
         selectAllenatore.style.display = 'none';
-        selectAllenatore.value = ''; // Reset filtro nascosto
+        selectAllenatore.value = '';
     }
-
-    filtraCarte();
 }
 
-function costruisciUrl(page) {
-    const params = new URLSearchParams({
-        nome: document.getElementById('filtro-nome').value,
-        espansione: document.getElementById('filtro-espansione').value,
-        tipoCarta: document.getElementById('filtro-categoria').value,
-        tipoEnergia: document.getElementById('filtro-tipo').value,
-        tipoAllenatore: document.getElementById('filtro-tipoAllenatore').value,
-        page: page
-    });
-    return `/carte/cerca?${params.toString()}`;
+// 2. Costruisce l'URL leggendo direttamente tutti gli input del <form>
+function costruisciUrlDalForm(page) {
+    const form = document.getElementById('form-filtri');
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData);
+    params.set('page', page);
+    return `/addCard/cerca?${params.toString()}`;
 }
 
-function filtraCarte() {
-    clearTimeout(timeoutRicerca);
-    timeoutRicerca = setTimeout(() => {
-        fetch(costruisciUrl(0))
+// 3. Chiamata al click sul bottone "Cerca Carte" (o invio da tastiera)
+function inviaFiltri(event) {
+    event.preventDefault(); // Blocca il ricaricamento completo della pagina!
+
+    fetch(costruisciUrlDalForm(0))
         .then(res => res.text())
-        .then(html => document.getElementById('griglia-carte').innerHTML = html);
-    }, 300);
+        .then(html => {
+            document.getElementById('griglia-carte').innerHTML = html;
+        });
 }
 
+// 4. Paginazione "Carica altre" mantenendo i filtri attuali del form
 function caricaAltre(numeroPagina) {
-    fetch(costruisciUrl(numeroPagina))
+    fetch(costruisciUrlDalForm(numeroPagina))
         .then(res => res.text())
         .then(html => {
             const btn = document.getElementById('box-carica-altre');
             if (btn) btn.remove();
             document.getElementById('griglia-carte').insertAdjacentHTML('beforeend', html);
         });
+}
+
+// 5. Reset completo del form e ricaricamento iniziale
+function resetFiltri() {
+    document.getElementById('form-filtri').reset();
+    aggiornaVisibilitaFiltri();
+    fetch(costruisciUrlDalForm(0))
+        .then(res => res.text())
+        .then(html => document.getElementById('griglia-carte').innerHTML = html);
 }

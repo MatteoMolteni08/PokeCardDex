@@ -60,3 +60,17 @@ INSERT INTO card (user_id, card_id, quantity) VALUES
 (3, "sv08.5-071", 4),
 (3, "sv08.5-072", 4),
 (3, "sv08.5-173", 2);
+
+INSERT INTO card (user_id, card_id, quantity) VALUES
+(3, "me06-068", 1),
+(3, "me06-069", 1),
+(3, "me06-084", 3),
+(3, "me06-116", 2),
+(3, "me06-120", 3),
+(3, "me06-124", 2),
+(2, "me06-135", 3),
+(3, "me06-138", 2),
+(4, "me06-140", 3),
+(2, "me06-139", 1);
+
+
